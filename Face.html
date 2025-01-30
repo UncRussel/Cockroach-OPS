@@ -1,0 +1,29 @@
+<video id="video" autoplay></video>
+<canvas id="canvas" style="display: none;"></canvas>
+<button id="capturar">Capturar Rosto</button>
+
+<script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const capturarBtn = document.getElementById('capturar');
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      video.srcObject = stream;
+    });
+
+  capturarBtn.addEventListener('click', async () => {
+    const detections = await faceapi.detectAllFaces(video);
+    if (detections.length > 0) {
+      alert('Rosto detectado!');
+      // Capturar imagem e enviar para o servidor
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/png');
+      // Enviar imageData para o servidor
+    } else {
+      alert('Nenhum rosto detectado.');
+    }
+  });
+</script>
